@@ -65,8 +65,8 @@ function getStringFromTemplate(firstName, lastName) {
  *   'Hello, John Doe!' => 'John Doe'
  *   'Hello, Chuck Norris!' => 'Chuck Norris'
  */
-function extractNameFromTemplate(/* value */) {
-  throw new Error('Not implemented');
+function extractNameFromTemplate(value) {
+  return value.split('').slice(7, -1).join('');
 }
 
 
@@ -112,8 +112,7 @@ function removeLeadingAndTrailingWhitespaces(value) {
  */
 function repeatString(value, count) {
   let result = '';
-  // eslint-disable-next-line no-plusplus
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < count; i += 1) {
     result += value;
   }
   return result;
@@ -131,8 +130,8 @@ function repeatString(value, count) {
  *   'I like legends', 'end' => 'I like legs',
  *   'ABABAB','BA' => 'ABAB'
  */
-function removeFirstOccurrences(/* str, value */) {
-  throw new Error('Not implemented');
+function removeFirstOccurrences(str, value) {
+  return str.replace(value, '');
 }
 
 /**
@@ -207,8 +206,11 @@ function extractEmails(str) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(/* width, height */) {
-  throw new Error('Not implemented');
+function getRectangleString(width, height) {
+  const firstLine = `┌${'─'.repeat(width - 2)}┐\n`;
+  const lastLine = `└${'─'.repeat(width - 2)}┘\n`;
+  const midleLine = `│${' '.repeat(width - 2)}│\n`;
+  return firstLine + midleLine.repeat(height - 2) + lastLine;
 }
 
 
@@ -228,8 +230,29 @@ function getRectangleString(/* width, height */) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  const stringUp = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const stringLow = 'abcdefghijklmnopqrstuvwxyz';
+  const arr = str.split('');
+  // eslint-disable-next-line array-callback-return, consistent-return
+  const result = arr.map((item) => {
+    if (stringUp.includes(item)) {
+      if (stringUp.indexOf(item) < 13) {
+        return stringUp.charAt(13 + stringUp.indexOf(item));
+      }
+      return stringUp.charAt(stringUp.indexOf(item) - 13);
+    }
+    if (stringLow.includes(item)) {
+      if (stringLow.indexOf(item) < 13) {
+        return stringLow.charAt(13 + stringLow.indexOf(item));
+      }
+      return stringLow.charAt(stringLow.indexOf(item) - 13);
+    }
+    if (!stringUp.includes(item) && !stringLow.includes(item)) {
+      return item;
+    }
+  });
+  return result.join('');
 }
 
 /**
@@ -245,8 +268,10 @@ function encodeToRot13(/* str */) {
  *   isString('test') => true
  *   isString(new String('test')) => true
  */
-function isString(/* value */) {
-  throw new Error('Not implemented');
+function isString(value) {
+  const type = Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
+  if (type === 'string') return true;
+  return false;
 }
 
 
@@ -274,8 +299,12 @@ function isString(/* value */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const values = 'A234567891JQK';
+  const suits = '♣♦♥♠';
+  const verticalIndex = values.indexOf(value[0]);
+  const horizontalIndex = suits.indexOf(value.slice(-1)) * 13;
+  return verticalIndex + horizontalIndex;
 }
 
 
