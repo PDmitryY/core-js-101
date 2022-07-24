@@ -1,3 +1,8 @@
+/* eslint-disable no-empty */
+/* eslint-disable consistent-return */
+/* eslint-disable prefer-rest-params */
+/* eslint-disable no-restricted-properties */
+/* eslint-disable func-names */
 /* *********************************************************************************************
  *                                                                                             *
  * Please read the following tutorial before implementing tasks:                                *
@@ -23,8 +28,10 @@
  *   getComposition(Math.sin, Math.asin)(x) => Math.sin(Math.asin(x))
  *
  */
-function getComposition(/* f, g */) {
-  throw new Error('Not implemented');
+function getComposition(f, g) {
+  return function (x) {
+    return f(g(x));
+  };
 }
 
 
@@ -44,8 +51,10 @@ function getComposition(/* f, g */) {
  *   power05(16) => 4
  *
  */
-function getPowerFunction(/* exponent */) {
-  throw new Error('Not implemented');
+function getPowerFunction(exponent) {
+  return function (x) {
+    return Math.pow(x, exponent);
+  };
 }
 
 
@@ -63,7 +72,15 @@ function getPowerFunction(/* exponent */) {
  *   getPolynom()      => null
  */
 function getPolynom() {
-  throw new Error('Not implemented');
+  const args = Array.prototype.slice.call(arguments);
+  if (!args.length) { return null; }
+  return function (x) {
+    let result = 0;
+    for (let i = 0; i < args.length; i += 1) {
+      result += args[i] * Math.pow(x, args.length - i - 1);
+    }
+    return result;
+  };
 }
 
 
@@ -81,8 +98,11 @@ function getPolynom() {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(/* func */) {
-  throw new Error('Not implemented');
+function memoize(func) {
+  const result = func();
+  return function () {
+    return result;
+  };
 }
 
 
@@ -101,8 +121,14 @@ function memoize(/* func */) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  return function () {
+    for (let i = 0; i <= attempts; i += 1) {
+      try {
+        return func();
+      } catch (error) {}
+    }
+  };
 }
 
 
