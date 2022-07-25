@@ -1,3 +1,4 @@
+/* eslint-disable prefer-promise-reject-errors */
 /* ************************************************************************************************
  *                                                                                                *
  * Please read the following tutorial before implementing tasks:                                   *
@@ -28,8 +29,14 @@
  *      .catch((error) => console.log(error.message)) // 'Error: Wrong parameter is passed!
  *                                                    //  Ask her again.';
  */
-function willYouMarryMe(/* isPositiveAnswer */) {
-  throw new Error('Not implemented');
+function willYouMarryMe(isPositiveAnswer) {
+  if (typeof isPositiveAnswer !== 'boolean') {
+    return Promise.reject(new Error('Wrong parameter is passed! Ask her again.'));
+  }
+  if (isPositiveAnswer) {
+    return Promise.resolve('Hooray!!! She said "Yes"!');
+  }
+  return Promise.resolve('Oh no, she said "No".');
 }
 
 
@@ -48,8 +55,8 @@ function willYouMarryMe(/* isPositiveAnswer */) {
  *    })
  *
  */
-function processAllPromises(/* array */) {
-  throw new Error('Not implemented');
+function processAllPromises(array) {
+  return Promise.all(array);
 }
 
 /**
@@ -71,8 +78,8 @@ function processAllPromises(/* array */) {
  *    })
  *
  */
-function getFastestPromise(/* array */) {
-  throw new Error('Not implemented');
+function getFastestPromise(array) {
+  return Promise.race(array);
 }
 
 /**
@@ -92,8 +99,33 @@ function getFastestPromise(/* array */) {
  *    });
  *
  */
-function chainPromises(/* array, action */) {
-  throw new Error('Not implemented');
+function chainPromises(array, action) {
+  // eslint-disable-next-line func-names
+  const promiseAll = function (promises) {
+    let count = promises.length;
+    const result = new Array(count).fill(false);
+    return new Promise((resolve) => {
+      const checkIfDone = () => {
+        // eslint-disable-next-line no-plusplus
+        if (--count === 0) resolve(result);
+      };
+      promises.forEach((promise, index) => {
+        promise.then((x) => {
+          result[index] = x;
+        // eslint-disable-next-line no-console
+        }).then(checkIfDone).catch(checkIfDone);
+      });
+    });
+  };
+  // eslint-disable-next-line arrow-body-style
+  return promiseAll(array).then((values) => {
+    return values.reduce((acc, nextVal) => {
+      if (acc === null) { return nextVal; }
+      // eslint-disable-next-line no-param-reassign
+      acc = action(acc, nextVal);
+      return acc;
+    }, null);
+  });
 }
 
 module.exports = {
