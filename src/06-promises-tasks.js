@@ -30,13 +30,22 @@
  *                                                    //  Ask her again.';
  */
 function willYouMarryMe(isPositiveAnswer) {
-  if (typeof isPositiveAnswer !== 'boolean') {
-    return Promise.reject(new Error('Wrong parameter is passed! Ask her again.'));
-  }
-  if (isPositiveAnswer) {
-    return Promise.resolve('Hooray!!! She said "Yes"!');
-  }
-  return Promise.resolve('Oh no, she said "No".');
+  // if (typeof isPositiveAnswer !== 'boolean') {
+  //   return Promise.reject(new Error('Wrong parameter is passed! Ask her again.'));
+  // }
+  // if (isPositiveAnswer) {
+  //   return Promise.resolve('Hooray!!! She said "Yes"!');
+  // }
+  // return Promise.resolve('Oh no, she said "No".');
+  return new Promise((resolve, reject) => {
+    if (typeof isPositiveAnswer !== 'boolean') {
+      return reject(new Error('Wrong parameter is passed! Ask her again.'));
+    }
+    if (isPositiveAnswer) {
+      return resolve('Hooray!!! She said "Yes"!');
+    }
+    return resolve('Oh no, she said "No".');
+  });
 }
 
 
